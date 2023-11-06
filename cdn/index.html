@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <p> R$ {{ formatPrice(acoes.latestPrice)}}</p>
+    <p>{{acoes.latestTime}}</p>
+    <p>{{acoes.companyName}}</p>
+    <button @click="getAcoes()">Puxar Ações</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+    const vm = new Vue({
+      el: "#app",
+      data: {
+        acoes: []
+      },
+      methods: {
+        async getAcoes() {
+          fetch('https://api.origamid.dev/stock/aapl/quote')
+            .then(res => res.json())
+            .then(json => this.acoes = json)
+        },
+        formatPrice(value) {
+          let val = (value/1).toFixed(2).replace('.', ',')
+          return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+        }
+      },
+    })
+
+  </script>
+</body>
+
+</html>

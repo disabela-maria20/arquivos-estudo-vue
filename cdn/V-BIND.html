@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .vermelho {
+      color: red;
+    }
+
+    .verde {
+      color: green;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="MostrarDados">Mostrar</button>
+    <ul>
+      <div v-for="(acao, index) in acoes" :key="index">
+        <h2>{{ acao.companyName }}</h2>
+        <p :class="{ verde: index === maiorMarketCapIndex, vermelho: index !== maiorMarketCapIndex }">
+          {{ acao.marketCap }}
+        </p>
+      </div>
+    </ul>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script>
+    const vm = new Vue({
+      el: "#app",
+      data: {
+        acoes: [],
+        maiorMarketCapIndex: null,
+      },
+      methods: {
+        async getAcoes() {
+          try {
+            const urls = [
+              'https://api.origamid.dev/stock/aapl/quote',
+              'https://api.origamid.dev/stock/googl/quote'
+            ];
+
+            const responses = await Promise.all(
+              urls.map(async url => {
+                const response = await fetch(url);
+                return response.json();
+              })
+            );
+
+            this.acoes = responses;
+            
+            const marketCaps = responses.map(acao => acao.marketCap);
+            this.maiorMarketCapIndex = marketCaps.indexOf(Math.max(...marketCaps));
+
+          } catch (error) {
+            console.error("Erro na solicitação:", error);
+          }
+        },
+        MostrarDados() {
+          this.getAcoes();
+        }
+      }
+    });
+  </script>
+</body>
+</html>
