@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <title>Document</title>
+  </head>
+  <style>
+    label {
+      display: block;
+    }
+  </style>
+  <body>
+    <div id="app">
+      <div>
+        <label for="nome">
+          Nome
+          <input type="text" v-model.trim="contato.nome" id="nome" />
+        </label>
+
+        <label for="email">
+          E-mail
+          <input type="email" v-model.trim="contato.email" id="email" />
+        </label>
+        <label for="telefone">
+          Telefone
+          <input type="text" v-model.trim="contato.telefone" id="telefone" />
+        </label>
+        <label for="mensagem">
+          Mensagem
+          <textarea
+            type="text"
+            v-model.trim="contato.mensagem"
+            id="mensagem"
+          ></textarea>
+        </label>
+        <button @click.prevent="Enviar">Enviar</button>
+      </div>
+      <div>
+        <h1>Dados</h1>
+        <ul>
+          <li v-for="(item, index) in items" :key="index">{{ item }}</li>
+        </ul>
+      </div>
+    </div>
+
+    <script>
+      const vm = new Vue({
+        el: "#app",
+        data: {
+          contato: {
+            nome: "",
+            email: "",
+            telefone: "",
+            mensagem: "",
+          },
+          items: [], 
+        },
+        methods: {
+          Enviar() {
+            this.items = [
+              `Nome: ${this.contato.nome}`,
+              `E-mail: ${this.contato.email}`,
+              `Telefone: ${this.contato.telefone}`,
+              `Mensagem: ${this.contato.mensagem}`,
+            ];
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
